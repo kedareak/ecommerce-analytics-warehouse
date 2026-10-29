@@ -1,0 +1,19 @@
+
+# Python virtual environment
+.venv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Local database
+*.duckdb
+*.duckdb.wal
+
+# Raw source data (download separately)
+data/*.csv
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
