@@ -1,18 +1,22 @@
 
+-- Customer Purchase Analysis
+-- Business question: How frequently do customers purchase?
+
 SELECT
-    c.customer_unique_id,
-    COUNT(DISTINCT o.order_id) AS delivered_orders,
-    ROUND(SUM(oi.price), 2) AS total_product_revenue,
+    COUNT(DISTINCT c.customer_unique_id) AS total_customers,
+    COUNT(DISTINCT o.order_id) AS total_orders,
     ROUND(
-        SUM(oi.price) / COUNT(DISTINCT o.order_id),
+        COUNT(DISTINCT o.order_id) * 1.0
+        / COUNT(DISTINCT c.customer_unique_id),
         2
-    ) AS average_order_value
+    ) AS orders_per_customer,
+    ROUND(
+        SUM(oi.price) / COUNT(DISTINCT c.customer_unique_id),
+        2
+    ) AS revenue_per_customer
 FROM raw_olist_customers_dataset AS c
 JOIN raw_olist_orders_dataset AS o
     ON c.customer_id = o.customer_id
 JOIN raw_olist_order_items_dataset AS oi
     ON o.order_id = oi.order_id
-WHERE o.order_status = 'delivered'
-GROUP BY c.customer_unique_id
-ORDER BY total_product_revenue DESC
-LIMIT 20;
+WHERE o.order_status = 'delivered';
